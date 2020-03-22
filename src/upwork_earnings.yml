@@ -1,0 +1,49 @@
+input:
+  filepath_or_buffer: "../data/input/example.csv"
+  sep: ","
+  encoding: "utf-8"
+  index_col: "Date"
+  usecols: ["Date", "Type", "Amount"]
+  parse_dates: ["Date"]
+
+
+# Data is sampled by this list of lists
+# 1st list element: frequency string (https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#dateoffset-objects)
+# 2nd list element: frequency word (used in the output file name)
+periods: [["W", "week"], ["M", "month"], ["Y", "year"]]
+
+output:
+  folder_path: "../data/output/"
+  csv:
+    sep: ","
+    encoding: "utf-8"
+    index: True
+
+
+logs:
+  version: 1
+  formatters:
+    simple:
+      format: "%(asctime)s %(message)s"
+  handlers:
+    console:
+      class: logging.StreamHandler
+      level: DEBUG
+      formatter: simple
+      stream: ext://sys.stdout
+    file:
+      class: logging.handlers.RotatingFileHandler
+      level: DEBUG
+      formatter: simple
+      filename: "../logs/log_%Y_%m_%d_%H_%M_%S.log"
+      maxBytes: 1024
+  loggers:
+    console_logger:
+      level: DEBUG
+      handlers: [console]
+    file_logger:
+      level: DEBUG
+      handlers: [file]
+  root:
+    level: DEBUG
+    handlers: [console, file]
